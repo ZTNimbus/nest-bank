@@ -1,0 +1,7 @@
+POST http://localhost:3000/transactions/batch
+{
+    personId: 1,
+    amount: 100
+}
+
+GET http://localhost:3000/transactions
