@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateTransactionDto {
@@ -7,5 +8,6 @@ export class CreateTransactionDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @Transform(({ value }) => parseFloat(parseFloat(value).toFixed(2)))
   amount: number;
 }

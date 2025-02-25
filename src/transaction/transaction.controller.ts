@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { BatchTransactionsDto } from './dtos/batch-transactions.dto';
 import { TransactionService } from './providers/transaction.service';
 
@@ -6,12 +14,13 @@ import { TransactionService } from './providers/transaction.service';
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
-  @Get()
-  public async getTransactions() {
-    return await this.transactionService.getTransactions();
+  @Get('/:id')
+  public async getTransactions(
+    @Param('id', new DefaultValuePipe(null), ParseIntPipe) id: number,
+  ) {
+    return await this.transactionService.getTransactions(id);
   }
-  //TODO TEST WITH POSTMAN
-  @Post('batch')
+  @Post()
   public async processTransactions(
     @Body() batchTransactionsDto: BatchTransactionsDto,
   ) {

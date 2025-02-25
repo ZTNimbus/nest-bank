@@ -5,8 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BankModule } from './bank/bank.module';
 import { PersonModule } from './person/person.module';
-import { TransactionModule } from './transaction/transaction.module';
 import { InitialDataSeeder } from './seeders/initial-data.seeder';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [

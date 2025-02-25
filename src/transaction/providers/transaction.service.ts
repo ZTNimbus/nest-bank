@@ -6,22 +6,24 @@ import { DataSource, Repository } from 'typeorm';
 import { BatchTransactionsDto } from '../dtos/batch-transactions.dto';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
 import { Transaction } from '../transaction.entity';
+import Decimal from 'decimal.js';
 
 @Injectable()
 export class TransactionService {
   constructor(
     @InjectRepository(Transaction)
     private readonly transactionRepository: Repository<Transaction>,
-    @InjectRepository(Bank)
-    private readonly bankRepository: Repository<Bank>,
     @InjectRepository(Person)
     private readonly personRepository: Repository<Person>,
-
     private readonly dataSource: DataSource,
   ) {}
 
-  public async getTransactions() {
-    return await this.transactionRepository.find();
+  public async getTransactions(id: number) {
+    if (id < 1) return { message: 'Invalid ID.' };
+
+    const person = await this.personRepository.find({ where: { id } });
+
+    return await this.transactionRepository.find({ where: { person } });
   }
 
   public async processTransaction(createTransactionDto: CreateTransactionDto) {
@@ -32,9 +34,9 @@ export class TransactionService {
     await queryRunner.startTransaction();
 
     try {
-      const bank = await queryRunner.manager.findOne(Bank, {
-        where: { id: 1 }, //Make sure the seeded Bank has ID of 1, otherwise this will be null!
-      });
+      const banks = await queryRunner.manager.find(Bank);
+
+      const bank = banks[0];
 
       const person = await queryRunner.manager.findOne(Person, {
         where: { id: createTransactionDto.personId },
@@ -52,7 +54,9 @@ export class TransactionService {
         status: 'pending',
       });
 
-      bank.balance += createTransactionDto.amount;
+      bank.balance = new Decimal(bank.balance)
+        .plus(createTransactionDto.amount)
+        .toNumber();
 
       await queryRunner.manager.save(bank);
 

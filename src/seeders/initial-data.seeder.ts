@@ -21,11 +21,9 @@ export class InitialDataSeeder implements OnApplicationBootstrap {
   }
 
   private async seedBank() {
-    const existingBank = await this.bankRepository.findOne({
-      where: { id: 1 },
-    });
+    const existingBank = await this.bankRepository.find();
 
-    if (existingBank) return;
+    if (existingBank.length) return;
     await this.bankRepository.save({
       name: 'Nest Bank',
       balance: 100, // Initial balance $100
