@@ -35,19 +35,16 @@ npm install
 
 Create a `.env` file in the root directory of the project based on the provided `.env.example`:
 
-```bash
-cp .env.example .env
-```
-
 Open the `.env` file and fill in the values:
 
 ```
 # Database Configuration
-DB_HOST=localhost
+PORT=3000
 DB_PORT=5432
-DB_USERNAME=your_db_username
-DB_PASSWORD=your_db_password
-DB_NAME=bank_database
+DB_USERNAME=postgres
+DB_PASSWORD=YOUR_POSTGRES_PASSWORD_HERE
+DB_HOST=localhost
+DB_NAME=NAME_OF_YOUR_DATABASE_IN_POSTGRES
 ```
 
 ### 4. Configure the database
@@ -89,8 +86,6 @@ The server will start at http://localhost:3000 (or the port you specified in the
 - `GET /transactions/:personId` - Get transactions for a person
 - `POST /transactions` - Process new transactions
 
-```
-
 ## Troubleshooting
 
 ### Database connection issues
@@ -102,4 +97,3 @@ The server will start at http://localhost:3000 (or the port you specified in the
 ### CORS errors
 
 - Check that the CORS origin in `main.ts` matches your frontend URL exactly
-```
