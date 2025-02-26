@@ -23,7 +23,10 @@ export class TransactionService {
 
     const person = await this.personRepository.find({ where: { id } });
 
-    return await this.transactionRepository.find({ where: { person } });
+    return await this.transactionRepository.find({
+      where: { person },
+      order: { timestamp: 'DESC' },
+    });
   }
 
   public async processTransaction(createTransactionDto: CreateTransactionDto) {
